@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace lab2.Database
+namespace lab2.Database.DAO
 {
     public abstract class Dao<T>
     {
-        protected DBConnection Dbconnection;
-        protected Dao(DBConnection db)
+        protected DbConnection Dbconnection;
+        protected Dao(DbConnection db)
         {
             Dbconnection = db;
         }

@@ -1,5 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using lab2.Controllers;
+using lab2.Database;
 
 namespace lab2
 {
@@ -7,12 +8,11 @@ namespace lab2
     {
         static void Main()
         {
-            using (var sr = new StreamReader("../../../DataBaseSettings.txt"))
-            {
-                var line = sr.ReadToEnd();
-                Console.WriteLine(line);
-            }
-            Console.WriteLine("Hello World!");
+            using var sr = new StreamReader("../../../DataBaseSettings.txt");
+            var line = sr.ReadToEnd();
+            var connection = new DbConnection(line);
+            var controller = new Controller(connection);
+            controller.Begin();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace lab2.Views
             return (MenuCommands) GetNum(0, 3);
         }
 
-        public static Entities ShowEntity()
+        public static Entities ShowEntities()
         {
             Console.Clear();
             Console.WriteLine("1 - User");

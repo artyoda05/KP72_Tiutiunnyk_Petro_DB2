@@ -5,11 +5,11 @@ using Npgsql;
 
 namespace lab2.Database
 {
-    public class DBConnection
+    public class DbConnection
     {
         private readonly NpgsqlConnection _connection;
 
-        public DBConnection(string connectString)
+        public DbConnection(string connectString)
         {
             _connection = new NpgsqlConnection(connectString);
         }
