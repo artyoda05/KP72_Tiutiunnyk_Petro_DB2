@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\" />
-    <Folder Include="Views\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

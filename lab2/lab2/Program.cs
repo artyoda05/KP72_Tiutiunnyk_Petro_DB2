@@ -1,11 +1,17 @@
 ﻿using System;
+using System.IO;
 
 namespace lab2
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            using (var sr = new StreamReader("../../../DataBaseSettings.txt"))
+            {
+                var line = sr.ReadToEnd();
+                Console.WriteLine(line);
+            }
             Console.WriteLine("Hello World!");
         }
     }
