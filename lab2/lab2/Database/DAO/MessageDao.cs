@@ -28,7 +28,7 @@ namespace lab2.Database.DAO
             command.Parameters.Add(new NpgsqlParameter("chat_id", entity.Chat.Id));
             command.Parameters.Add(new NpgsqlParameter("user_id", entity.User.Id));
             command.Parameters.Add(new NpgsqlParameter("text", entity.Text));
-            command.Parameters.Add(new NpgsqlParameter("date", (NpgsqlDateTime) entity.Time));
+            command.Parameters.Add(new NpgsqlParameter("date", NpgsqlDateTime.Now));
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
@@ -44,10 +44,16 @@ namespace lab2.Database.DAO
             Message message = null;
             if (reader.Read())
                 message = new Message(reader.GetInt64(0),
-                    _userDao.Get(reader.GetInt64(2)),
-                    _chatDao.Get(reader.GetInt64(1)),
+                    new User(reader.GetInt64(2)),
+                    new Chat(reader.GetInt64(1)),
                     reader.GetString(3),
-                    reader.GetTimeStamp(5).ToDateTime());
+                    reader.GetTimeStamp(4).ToDateTime());
+            Dbconnection.Close();
+            if (!(message is null))
+            {
+                message.User = _userDao.Get(message.User.Id);
+                message.Chat = _chatDao.Get(message.Chat.Id);
+            }
             return message;
         }
 
@@ -62,10 +68,16 @@ namespace lab2.Database.DAO
             var messages = new List<Message>();
             while (reader.Read())
                 messages.Add(new Message(reader.GetInt64(0),
-                    _userDao.Get(reader.GetInt64(2)),
-                    _chatDao.Get(reader.GetInt64(1)),
+                    new User(reader.GetInt64(2)), 
+                    new Chat(reader.GetInt64(1)),
                     reader.GetString(3),
-                    reader.GetTimeStamp(5).ToDateTime()));
+                    reader.GetTimeStamp(4).ToDateTime()));
+            Dbconnection.Close();
+            foreach (var message in messages)
+            {
+                message.User = _userDao.Get(message.User.Id);
+                message.Chat = _chatDao.Get(message.Chat.Id);
+            }
             return messages;
         }
 

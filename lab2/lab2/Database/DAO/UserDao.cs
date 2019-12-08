@@ -13,11 +13,10 @@ namespace lab2.Database.DAO
             var connection = Dbconnection.Open();
             var command = connection.CreateCommand();
             command.CommandText = 
-                "INSERT INTO public.user (login, name, bio) VALUES (:login, :name, :bio)";
+                "INSERT INTO public.user (login, name) VALUES (:login, :name)";
             command.Parameters.Add(new NpgsqlParameter("login", entity.Login));
             command.Parameters.Add(new NpgsqlParameter("name", entity.Name));
-            command.Parameters.Add(new NpgsqlParameter("bio", entity.Bio));
-            command.ExecuteNonQuery();
+            command.ExecuteReader();
             Dbconnection.Close();
         }
 

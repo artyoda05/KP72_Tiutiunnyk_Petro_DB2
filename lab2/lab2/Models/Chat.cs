@@ -7,7 +7,7 @@
         public string Name { get; set; }
         public string Bio { get; set; }
 
-        public Chat(long id, string tag, string name, string bio = null)
+        public Chat(long id, string tag = null, string name = null, string bio = null)
         {
             Id = id;
             Tag = tag;

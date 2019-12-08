@@ -43,9 +43,15 @@ namespace lab2.Database.DAO
             UserChat userChat = null;
             if (reader.Read())
                 userChat = new UserChat(reader.GetInt64(0),
-                    _userDao.Get(reader.GetInt64(1)),
-                    _chatDao.Get(reader.GetInt64(2)),
+                    new User(reader.GetInt64(1)),
+                    new Chat(reader.GetInt64(2)),
                     reader.GetBoolean(3));
+            Dbconnection.Close();
+            if (!(userChat is null))
+            {
+                userChat.User = _userDao.Get(userChat.User.Id);
+                userChat.Chat = _chatDao.Get(userChat.Chat.Id);
+            }
             return userChat;
         }
 
@@ -60,9 +66,15 @@ namespace lab2.Database.DAO
             var userChats = new List<UserChat>();
             while (reader.Read())
                 userChats.Add(new UserChat(reader.GetInt64(0),
-                    _userDao.Get(reader.GetInt64(1)),
-                    _chatDao.Get(reader.GetInt64(2)),
+                    new User(reader.GetInt64(1)),
+                    new Chat(reader.GetInt64(2)),
                     reader.GetBoolean(3)));
+            Dbconnection.Close();
+            foreach (var userChat in userChats)
+            {
+                userChat.User = _userDao.Get(userChat.User.Id);
+                userChat.Chat = _chatDao.Get(userChat.Chat.Id);
+            }
             return userChats;
         }
 

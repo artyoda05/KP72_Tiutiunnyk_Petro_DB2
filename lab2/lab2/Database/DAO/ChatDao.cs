@@ -14,10 +14,9 @@ namespace lab2.Database.DAO
             var connection = Dbconnection.Open();
             var command = connection.CreateCommand();
             command.CommandText =
-                "INSERT INTO public.chat (tag, name, bio) VALUES (:tag, :name, :bio)";
+                "INSERT INTO public.chat (tag, name) VALUES (:tag, :name)";
             command.Parameters.Add(new NpgsqlParameter("tag", entity.Tag));
             command.Parameters.Add(new NpgsqlParameter("name", entity.Name));
-            command.Parameters.Add(new NpgsqlParameter("bio", entity.Bio));
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
