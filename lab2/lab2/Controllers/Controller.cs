@@ -9,10 +9,10 @@ namespace lab2.Controllers
 {
     public class Controller
     {
-        private Dao<User> _userDao;
-        private Dao<Chat> _chatDao;
-        private Dao<UserChat> _userChatDao;
-        private Dao<Message> _messageDao;
+        private readonly Dao<User> _userDao;
+        private readonly Dao<Chat> _chatDao;
+        private readonly Dao<UserChat> _userChatDao;
+        private readonly Dao<Message> _messageDao;
 
         public Controller(DbConnection dbConnection)
         {
@@ -34,7 +34,7 @@ namespace lab2.Controllers
                 if (menuCom == MenuCommands.Crud)
                     BeginCrud();
                 if (menuCom == MenuCommands.Random)
-                    throw new NotImplementedException();
+                    ExecuteRandomise();
                 if (menuCom == MenuCommands.FullTextSearch)
                     throw new NotImplementedException();
             }
@@ -89,6 +89,16 @@ namespace lab2.Controllers
                     view.OperationStatusOutput(false);
                 }
             }
+        }
+
+        private void ExecuteRandomise()
+        {
+            var number = RandomiseView.ShowRandomise();
+            if (number == -1)
+                return;
+            var randomiser = new Randomiser(_userDao, _chatDao,
+                _userChatDao, _messageDao);
+            randomiser.Randomise(number);
         }
     }
 }

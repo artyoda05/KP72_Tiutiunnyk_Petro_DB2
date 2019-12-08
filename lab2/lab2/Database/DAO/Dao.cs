@@ -15,5 +15,6 @@ namespace lab2.Database.DAO
         public abstract List<T> Get(int page);
         public abstract void Update(T entity);
         public abstract void Delete(long id);
+        public abstract void Clear();
     }
 }

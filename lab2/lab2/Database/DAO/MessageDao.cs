@@ -102,5 +102,14 @@ namespace lab2.Database.DAO
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
+
+        public override void Clear()
+        {
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "TRUNCATE TABLE public.message RESTART IDENTITY";
+            command.ExecuteNonQuery();
+            Dbconnection.Close();
+        }
     }
 }

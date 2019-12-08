@@ -27,7 +27,7 @@ namespace lab2.Database.DAO
                 "VALUES (:user_id, :chat_id, :isAdmin)";
             command.Parameters.Add(new NpgsqlParameter("user_id", entity.User.Id));
             command.Parameters.Add(new NpgsqlParameter("chat_id", entity.Chat.Id));
-            command.Parameters.Add(new NpgsqlParameter("text", entity.IsAdmin));
+            command.Parameters.Add(new NpgsqlParameter("isAdmin", entity.IsAdmin));
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
@@ -96,6 +96,15 @@ namespace lab2.Database.DAO
             var command = connection.CreateCommand();
             command.CommandText = "DELETE FROM public.user_chat WHERE id = :id";
             command.Parameters.Add(new NpgsqlParameter("id", id));
+            command.ExecuteNonQuery();
+            Dbconnection.Close();
+        }
+
+        public override void Clear()
+        {
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "TRUNCATE TABLE public.user_chat RESTART IDENTITY";
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
