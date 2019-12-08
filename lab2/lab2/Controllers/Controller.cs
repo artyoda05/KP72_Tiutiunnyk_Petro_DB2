@@ -17,8 +17,10 @@ namespace lab2.Controllers
         {
             _userDao = new UserDao(dbConnection);
             _chatDao = new ChatDao(dbConnection);
-            _userChatDao = new UserChatDao(dbConnection);
-            _messageDao = new MessageDao(dbConnection);
+            _userChatDao =
+                new UserChatDao(dbConnection, _userDao, _chatDao);
+            _messageDao =
+                new MessageDao(dbConnection, _userDao, _chatDao);
         }
 
         public void Begin()

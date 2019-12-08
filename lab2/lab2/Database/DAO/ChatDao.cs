@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using lab2.Models;
+using Npgsql;
 
 namespace lab2.Database.DAO
 {
@@ -11,27 +11,79 @@ namespace lab2.Database.DAO
 
         public override void Create(Chat entity)
         {
-            throw new NotImplementedException();
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText =
+                "INSERT INTO public.chat (tag, name, bio) VALUES (:tag, :name, :bio)";
+            command.Parameters.Add(new NpgsqlParameter("tag", entity.Tag));
+            command.Parameters.Add(new NpgsqlParameter("name", entity.Name));
+            command.Parameters.Add(new NpgsqlParameter("bio", entity.Bio));
+            command.ExecuteNonQuery();
+            Dbconnection.Close();
         }
 
         public override Chat Get(long id)
         {
-            throw new NotImplementedException();
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText =
+                "SELECT * FROM public.chat WHERE id = :id";
+            command.Parameters.Add(new NpgsqlParameter("id", id));
+            var reader = command.ExecuteReader();
+            Chat chat = null;
+            if (reader.Read())
+                chat = new Chat(reader.GetInt64(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.IsDBNull(3)
+                        ? null
+                        : reader.GetString(3));
+            Dbconnection.Close();
+            return chat;
         }
 
         public override List<Chat> Get(int page)
         {
-            throw new NotImplementedException();
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText =
+                "SELECT * FROM public.chat LIMIT 10 OFFSET :offset";
+            command.Parameters.Add(new NpgsqlParameter("offset", page * 10));
+            var reader = command.ExecuteReader();
+            var chats = new List<Chat>();
+            while (reader.Read())
+                chats.Add( new Chat(reader.GetInt64(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.IsDBNull(3)
+                        ? null
+                        : reader.GetString(3)));
+            Dbconnection.Close();
+            return chats;
         }
 
         public override void Update(Chat entity)
         {
-            throw new NotImplementedException();
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText =
+                "UPDATE public.chat SET tag = :tag, name = :name, bio = :bio WHERE id = :id";
+            command.Parameters.Add(new NpgsqlParameter("id", entity.Id));
+            command.Parameters.Add(new NpgsqlParameter("tag", entity.Tag));
+            command.Parameters.Add(new NpgsqlParameter("name", entity.Name));
+            command.Parameters.Add(new NpgsqlParameter("bio", entity.Bio));
+            command.ExecuteNonQuery();
+            Dbconnection.Close();
         }
 
         public override void Delete(long id)
         {
-            throw new NotImplementedException();
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "DELETE FROM public.chat WHERE id = :id";
+            command.Parameters.Add(new NpgsqlParameter("id", id));
+            command.ExecuteNonQuery();
+            Dbconnection.Close();
         }
     }
 }
