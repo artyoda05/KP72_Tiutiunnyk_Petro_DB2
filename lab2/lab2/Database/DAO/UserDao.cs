@@ -91,5 +91,25 @@ namespace lab2.Database.DAO
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
+
+        public User Search(string str)
+        {
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText =
+                "SELECT * FROM public.user WHERE login = :login";
+            command.Parameters.Add(new NpgsqlParameter("login", str));
+            var reader = command.ExecuteReader();
+            User user = null;
+            if (reader.Read())
+                user = new User(reader.GetInt64(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.IsDBNull(3)
+                        ? null
+                        : reader.GetString(3));
+            Dbconnection.Close();
+            return user;
+        }
     }
 }

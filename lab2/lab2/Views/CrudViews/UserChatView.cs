@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Runtime.CompilerServices;
 using System.Text;
 using ConsoleTableExt;
 using lab2.Database.DAO;
@@ -47,12 +48,21 @@ namespace lab2.Views.CrudViews
             return entity;
         }
 
+        public (string value, bool isAdmin) Search()
+        {
+            Console.WriteLine("\n\rWrite string to search in relation:");
+            var value = Console.ReadLine();
+            Console.WriteLine("Is it admin? (True/false):");
+            var isAdmin = GetBool();
+            return (value, isAdmin);
+        }
+
         protected override DataTable DataToDataTable(List<UserChat> data)
         {
             var dataTable = new DataTable("Users");
             dataTable.Columns.Add(new DataColumn("Id", typeof(long)));
-            dataTable.Columns.Add(new DataColumn("User name", typeof(string)));
-            dataTable.Columns.Add(new DataColumn("Chat Name", typeof(string)));
+            dataTable.Columns.Add(new DataColumn("User login", typeof(string)));
+            dataTable.Columns.Add(new DataColumn("Chat tag", typeof(string)));
             dataTable.Columns.Add(new DataColumn("IsAdmin", typeof(bool)));
             if (data.Count == 0)
             {
@@ -68,7 +78,7 @@ namespace lab2.Views.CrudViews
                     {
                         el.Id,
                         el.User.Login,
-                        el.Chat.Name,
+                        el.Chat.Tag,
                         el.IsAdmin
                     };
                     dataTable.Rows.Add(row);
@@ -116,5 +126,7 @@ namespace lab2.Views.CrudViews
                 Console.WriteLine("Wrong input!");
             return boolean;
         }
+
+
     }
 }

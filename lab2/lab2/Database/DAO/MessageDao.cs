@@ -38,22 +38,21 @@ namespace lab2.Database.DAO
             var connection = Dbconnection.Open();
             var command = connection.CreateCommand();
             command.CommandText =
-                "SELECT * FROM public.message WHERE id = :id";
+                "SELECT mes.id, us.id, us.login, ch.id, ch.tag, mes.text, mes.date " +
+                "FROM public.message AS mes " +
+                "INNER JOIN public.user AS us ON mes.user_id = us.id " +
+                "INNER JOIN public.chat AS ch ON mes.chat_id = ch.id " +
+                "WHERE mes.id = :id";
             command.Parameters.Add(new NpgsqlParameter("id", id));
             var reader = command.ExecuteReader();
             Message message = null;
             if (reader.Read())
                 message = new Message(reader.GetInt64(0),
-                    new User(reader.GetInt64(2)),
-                    new Chat(reader.GetInt64(1)),
-                    reader.GetString(3),
-                    reader.GetTimeStamp(4).ToDateTime());
+                    new User(reader.GetInt64(1), reader.GetString(2)),
+                    new Chat(reader.GetInt64(3), reader.GetString(4)),
+                    reader.GetString(5),
+                    reader.GetTimeStamp(6).ToDateTime());
             Dbconnection.Close();
-            if (!(message is null))
-            {
-                message.User = _userDao.Get(message.User.Id);
-                message.Chat = _chatDao.Get(message.Chat.Id);
-            }
             return message;
         }
 
@@ -62,22 +61,21 @@ namespace lab2.Database.DAO
             var connection = Dbconnection.Open();
             var command = connection.CreateCommand();
             command.CommandText =
-                "SELECT * FROM public.message LIMIT 10 OFFSET :offset";
+                "SELECT mes.id, us.id, us.login, ch.id, ch.tag, mes.text, mes.date " +
+                "FROM public.message AS mes " +
+                "INNER JOIN public.user AS us ON mes.user_id = us.id " +
+                "INNER JOIN public.chat AS ch ON mes.chat_id = ch.id " + 
+                "LIMIT 10 OFFSET :offset";
             command.Parameters.Add(new NpgsqlParameter("offset", page * 10));
             var reader = command.ExecuteReader();
             var messages = new List<Message>();
             while (reader.Read())
                 messages.Add(new Message(reader.GetInt64(0),
-                    new User(reader.GetInt64(2)), 
-                    new Chat(reader.GetInt64(1)),
-                    reader.GetString(3),
-                    reader.GetTimeStamp(4).ToDateTime()));
+                    new User(reader.GetInt64(1), reader.GetString(2)),
+                    new Chat(reader.GetInt64(3), reader.GetString(4)),
+                    reader.GetString(5),
+                    reader.GetTimeStamp(6).ToDateTime()));
             Dbconnection.Close();
-            foreach (var message in messages)
-            {
-                message.User = _userDao.Get(message.User.Id);
-                message.Chat = _chatDao.Get(message.Chat.Id);
-            }
             return messages;
         }
 

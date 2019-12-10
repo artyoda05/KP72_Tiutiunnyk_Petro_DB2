@@ -93,5 +93,25 @@ namespace lab2.Database.DAO
             command.ExecuteNonQuery();
             Dbconnection.Close();
         }
+
+        public Chat Search(string str)
+        {
+            var connection = Dbconnection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText =
+                "SELECT * FROM public.chat WHERE tag = :tag";
+            command.Parameters.Add(new NpgsqlParameter("tag", str));
+            var reader = command.ExecuteReader();
+            Chat chat = null;
+            if (reader.Read())
+                chat = new Chat(reader.GetInt64(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.IsDBNull(3)
+                        ? null
+                        : reader.GetString(3));
+            Dbconnection.Close();
+            return chat;
+        }
     }
 }

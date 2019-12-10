@@ -40,6 +40,12 @@ namespace lab2.Views.CrudViews
             return entity;
         }
 
+        public string Search()
+        {
+            Console.WriteLine("\r\nInput login");
+            return Console.ReadLine();
+        }
+
         protected override DataTable DataToDataTable(List<User> data)
         {
             var dataTable = new DataTable("Users");

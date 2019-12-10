@@ -80,6 +80,8 @@ namespace lab2.Controllers
                         dao.Update(view.Update(dao.Get(view.Read())));
                     if (com == CrudOperations.Delete)
                         dao.Delete(view.Read());
+                    if (com == CrudOperations.Search)
+                        ExecuteSearch(view, dao);
                     if (com == CrudOperations.Create || com == CrudOperations.Delete
                                                      || com == CrudOperations.Update)
                         view.OperationStatusOutput(true);
@@ -88,6 +90,34 @@ namespace lab2.Controllers
                 {
                     view.OperationStatusOutput(false);
                 }
+            }
+        }
+
+        private void ExecuteSearch<T>(CrudView<T> view, Dao<T> dao)
+        {
+            var type = typeof(T);
+            if (type == typeof(Message))
+                return;
+            if (type == typeof(User))
+            {
+                var v = view as UserView;
+                var d = dao as UserDao;
+                v.ShowReadResult(d.Search(v.Search()));
+            }
+
+            if (type == typeof(Chat))
+            {
+                var v = view as ChatView;
+                var d = dao as ChatDao;
+                v.ShowReadResult(d.Search(v.Search()));
+            }
+
+            if (type == typeof(UserChat))
+            {
+                var v = view as UserChatView;
+                var d = dao as UserChatDao;
+                var query = v.Search();
+                v.ShowReadResult(d.Search(query.value, query.isAdmin));
             }
         }
 

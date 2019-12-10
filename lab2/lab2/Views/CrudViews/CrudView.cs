@@ -19,7 +19,7 @@ namespace lab2.Views.CrudViews
             ConsoleTableBuilder.From(DataToDataTable(data))
                                 .WithFormat(ConsoleTableBuilderFormat.Alternative)
                                 .ExportAndWriteLine();
-            Console.WriteLine($"Page {page}");
+            Console.WriteLine($"Page {page + 1}");
             Console.WriteLine("<,> - left, right");
             Console.WriteLine("Operations:");
             Console.WriteLine("1 - Create");
