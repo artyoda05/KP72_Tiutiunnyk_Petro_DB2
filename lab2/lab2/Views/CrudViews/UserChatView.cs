@@ -57,6 +57,15 @@ namespace lab2.Views.CrudViews
             return (value, isAdmin);
         }
 
+        public void ShowSearchResult(List<UserChat> data)
+        {
+            Console.WriteLine("Result:");
+            ConsoleTableBuilder.From(DataToDataTable(data))
+                .WithFormat(ConsoleTableBuilderFormat.Alternative)
+                .ExportAndWriteLine();
+            Console.ReadKey();
+        }
+
         protected override DataTable DataToDataTable(List<UserChat> data)
         {
             var dataTable = new DataTable("Users");

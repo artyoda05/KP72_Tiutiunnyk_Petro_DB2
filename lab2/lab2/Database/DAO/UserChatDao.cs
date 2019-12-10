@@ -57,6 +57,7 @@ namespace lab2.Database.DAO
                 "FROM public.user_chat AS rel " +
                 "INNER JOIN public.user AS us ON rel.user_id = us.id " +
                 "INNER JOIN public.chat AS ch ON rel.chat_id = ch.id " +
+                "ORDER BY rel.id "+
                 "LIMIT 10 OFFSET :offset";
             command.Parameters.Add(new NpgsqlParameter("offset", page * 10));
             var reader = command.ExecuteReader();
@@ -101,7 +102,7 @@ namespace lab2.Database.DAO
             Dbconnection.Close();
         }
 
-        public UserChat Search(string value, bool isAdmin)
+        public List<UserChat> Search(string value, bool isAdmin)
         {
             var connection = Dbconnection.Open();
             var command = connection.CreateCommand();
@@ -115,12 +116,12 @@ namespace lab2.Database.DAO
             command.Parameters.Add(new NpgsqlParameter("value", value));
             command.Parameters.Add(new NpgsqlParameter("isAdmin", isAdmin));
             var reader = command.ExecuteReader();
-            UserChat userChat = null;
-            if (reader.Read())
-                userChat = new UserChat(reader.GetInt64(0),
+            var userChat = new List<UserChat>();
+            while (reader.Read())
+                userChat.Add( new UserChat(reader.GetInt64(0),
                     new User(reader.GetInt64(1), reader.GetString(2)),
                     new Chat(reader.GetInt64(3), reader.GetString(4)),
-                    reader.GetBoolean(5));
+                    reader.GetBoolean(5)));
             Dbconnection.Close();
             return userChat;
         }

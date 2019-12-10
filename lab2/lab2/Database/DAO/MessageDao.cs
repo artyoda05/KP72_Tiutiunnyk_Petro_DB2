@@ -55,10 +55,11 @@ namespace lab2.Database.DAO
             var connection = Dbconnection.Open();
             var command = connection.CreateCommand();
             command.CommandText =
-                "SELECT mes.id, us.id, us.login, ch.id, ch.tag, mes.text, mes.date " +
+                "SELECT mes.id, us.id, us.name, ch.id, ch.name, mes.text, mes.date " +
                 "FROM public.message AS mes " +
                 "INNER JOIN public.user AS us ON mes.user_id = us.id " +
                 "INNER JOIN public.chat AS ch ON mes.chat_id = ch.id " + 
+                "ORDER BY mes.id " +
                 "LIMIT 10 OFFSET :offset";
             command.Parameters.Add(new NpgsqlParameter("offset", page * 10));
             var reader = command.ExecuteReader();

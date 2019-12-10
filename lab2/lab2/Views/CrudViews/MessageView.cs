@@ -69,7 +69,7 @@ namespace lab2.Views.CrudViews
                     {
                         el.Id,
                         el.User.Login,
-                        el.Chat.Name,
+                        el.Chat.Tag,
                         el.Text,
                         el.Time
                     };

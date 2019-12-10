@@ -117,7 +117,7 @@ namespace lab2.Controllers
                 var v = view as UserChatView;
                 var d = dao as UserChatDao;
                 var query = v.Search();
-                v.ShowReadResult(d.Search(query.value, query.isAdmin));
+                v.ShowSearchResult(d.Search(query.value, query.isAdmin));
             }
         }
 
