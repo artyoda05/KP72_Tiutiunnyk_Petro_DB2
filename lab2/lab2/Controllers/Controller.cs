@@ -13,15 +13,15 @@ namespace lab2.Controllers
         private readonly Dao<Chat> _chatDao;
         private readonly Dao<UserChat> _userChatDao;
         private readonly Dao<Message> _messageDao;
+        private readonly FullTextSearch _fullTextSearch;
 
         public Controller(DbConnection dbConnection)
         {
             _userDao = new UserDao(dbConnection);
             _chatDao = new ChatDao(dbConnection);
-            _userChatDao =
-                new UserChatDao(dbConnection, _userDao, _chatDao);
-            _messageDao =
-                new MessageDao(dbConnection, _userDao, _chatDao);
+            _userChatDao = new UserChatDao(dbConnection);
+            _messageDao = new MessageDao(dbConnection);
+            _fullTextSearch = new FullTextSearch(dbConnection);
         }
 
         public void Begin()
@@ -36,7 +36,7 @@ namespace lab2.Controllers
                 if (menuCom == MenuCommands.Random)
                     ExecuteRandomise();
                 if (menuCom == MenuCommands.FullTextSearch)
-                    throw new NotImplementedException();
+                    ExecuteFullTestSearch();
             }
         }
 
@@ -129,6 +129,14 @@ namespace lab2.Controllers
             var randomiser = new Randomiser(_userDao, _chatDao,
                 _userChatDao, _messageDao);
             randomiser.Randomise(number);
+        }
+
+        private void ExecuteFullTestSearch()
+        {
+            var command = FullTextSearchView.Begin();
+            FullTextSearchView.ShowResults(command.Item1 == FullTextSearchCommands.FullPhrase
+                ? _fullTextSearch.GetFullPhrase("text", "message", command.Item2)
+                : _fullTextSearch.GetAllWithIncludedWord("text", "message", command.Item2));
         }
     }
 }

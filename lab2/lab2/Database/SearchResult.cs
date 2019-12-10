@@ -6,19 +6,17 @@ namespace lab2.Database
 {
     class SearchResult
     {
-        private long id;
-        private string attr;
-        private string ts_headline;
-
-        public SearchResult(long id, string attr, string ts_headline)
+        public SearchResult(long id, string attr, string tsHeadline)
         {
             Id = id;
-            this.Attr = attr;
-            this.Ts_headline = ts_headline;
+            Attr = attr;
+            TsHeadline = tsHeadline;
         }
 
-        public long Id { get => id; set => id = value; }
-        public string Attr { get => attr; set => attr = value; }
-        public string Ts_headline { get => ts_headline; set => ts_headline = value; }
+        public long Id { get; set; }
+
+        public string Attr { get; set; }
+
+        public string TsHeadline { get; set; }
     }
 }

@@ -8,15 +8,9 @@ namespace lab2.Database.DAO
 {
     class UserChatDao : Dao<UserChat>
     {
-        private readonly Dao<User> _userDao;
-        private readonly Dao<Chat> _chatDao;
 
-        public UserChatDao(DbConnection db, Dao<User> userDao, Dao<Chat> chatDao)
-            : base(db)
-        {
-            _userDao = userDao;
-            _chatDao = chatDao;
-        }
+        public UserChatDao(DbConnection db)
+            : base(db) { }
 
         public override void Create(UserChat entity)
         {

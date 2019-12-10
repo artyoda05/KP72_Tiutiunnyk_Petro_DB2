@@ -49,7 +49,7 @@ namespace lab2.Views.CrudViews
 
         protected override DataTable DataToDataTable(List<Message> data)
         {
-            var dataTable = new DataTable("Users");
+            var dataTable = new DataTable("Messages");
             dataTable.Columns.Add(new DataColumn("Id", typeof(long)));
             dataTable.Columns.Add(new DataColumn("User name", typeof(string)));
             dataTable.Columns.Add(new DataColumn("Chat Name", typeof(string)));
